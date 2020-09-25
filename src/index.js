@@ -1,1 +1,1 @@
-console.log('Hello World!');
+module.exports.server = require('./server');
