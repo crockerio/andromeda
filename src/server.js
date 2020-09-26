@@ -13,6 +13,9 @@ let server;
 module.exports = {
     start()
     {
+        const router = require('./router');
+        app.use(router.getRouter());
+
         server = app.listen(port, () => {
             console.log(`App listening at http://localhost:${port}`);
         });

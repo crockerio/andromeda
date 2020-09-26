@@ -1,6 +1,6 @@
 const path = require('path');
 const pluralize = require('pluralize');
-const server = require('./server');
+const express = require('express');
 const Controller = require('./http/Controller');
 const InvalidArgumentError = require('./exceptions/InvalidArgumentError');
 
@@ -17,7 +17,7 @@ class Router
      */
     constructor()
     {
-        this._app = server.getApp();
+        this._router = express.Router();
         this._nameRouteMap = new Map();
     }
 
@@ -80,7 +80,7 @@ class Router
         }
 
         this._nameRouteMap.set(name, url);
-        this._app.get(url, fn);
+        this._router.get(url, fn);
     }
 
     post(url, fn, name = undefined)
@@ -91,7 +91,7 @@ class Router
         }
 
         this._nameRouteMap.set(name, url);
-        this._app.post(url, fn);
+        this._router.post(url, fn);
     }
 
     put(url, fn, name = undefined)
@@ -102,7 +102,7 @@ class Router
         }
 
         this._nameRouteMap.set(name, url);
-        this._app.put(url, fn);
+        this._router.put(url, fn);
     }
 
     patch(url, fn, name = undefined)
@@ -113,7 +113,7 @@ class Router
         }
 
         this._nameRouteMap.set(name, url);
-        this._app.patch(url, fn);
+        this._router.patch(url, fn);
     }
 
     delete(url, fn, name = undefined)
@@ -124,7 +124,7 @@ class Router
         }
 
         this._nameRouteMap.set(name, url);
-        this._app.delete(url, fn);
+        this._router.delete(url, fn);
     }
 
     /**
@@ -159,10 +159,15 @@ class Router
         this.delete(showUrl, controller.destroy, defaultNames.destroy);
     }
 
+    getRouter()
+    {
+        return this._router;
+    }
+
     reset()
     {
         this._nameRouteMap.clear();
-        this._app.routes = {};
+        this._router.routes = {};
     }
 }
 
