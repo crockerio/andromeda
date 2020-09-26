@@ -9,8 +9,8 @@ class MethodNotImplementedError extends Error
      * @param  {...any} args the arguments.
      */
     constructor(...args) {
-        super(...args)
-        Error.captureStackTrace(this, MethodNotImplementedError)
+        super(...args);
+        Error.captureStackTrace(this, MethodNotImplementedError);
     }
 }
 

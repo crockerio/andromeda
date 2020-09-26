@@ -25,7 +25,7 @@ class Router
     {
         if (url.length === 0)
         {
-            throw new InvalidArgumentError("`url` cannot be blank");
+            throw new InvalidArgumentError('`url` cannot be blank');
         }
 
         const segments = url.split('/');

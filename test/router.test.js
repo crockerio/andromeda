@@ -280,8 +280,8 @@ describe('router', () => {
 
             server.start();
             request(server.getServer())
-            .get('/endpoint')
-            .expect(200, done);
+                .get('/endpoint')
+                .expect(200, done);
         });
 
         it('can reset the router instance', (done) => {
@@ -294,8 +294,8 @@ describe('router', () => {
 
             server.start();
             request(server.getServer())
-            .get('/endpoint')
-            .expect(404, done);
+                .get('/endpoint')
+                .expect(404, done);
         });
     });
 });

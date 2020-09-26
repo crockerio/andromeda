@@ -9,8 +9,8 @@ class InvalidArgumentError extends Error
      * @param  {...any} args the arguments.
      */
     constructor(...args) {
-        super(...args)
-        Error.captureStackTrace(this, InvalidArgumentError)
+        super(...args);
+        Error.captureStackTrace(this, InvalidArgumentError);
     }
 }
 
