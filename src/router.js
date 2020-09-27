@@ -19,6 +19,8 @@ class Router
     constructor()
     {
         this._router = express.Router();
+        this._urlContext = '';
+        this._context = this._router;
         this._nameRouteMap = new Map();
     }
 
@@ -44,6 +46,7 @@ class Router
 
     _getRouteName(url)
     {
+        url = path.join(this._urlContext, url);
         const segments = url.split('/').filter(segment => segment.length > 0 && !segment.startsWith(':'));
         return segments.join('.');
     }
@@ -81,7 +84,7 @@ class Router
         }
 
         this._nameRouteMap.set(name, url);
-        this._router.get(url, fn);
+        this._context.get(url, fn);
     }
 
     post(url, fn, name = undefined)
@@ -92,7 +95,7 @@ class Router
         }
 
         this._nameRouteMap.set(name, url);
-        this._router.post(url, fn);
+        this._context.post(url, fn);
     }
 
     put(url, fn, name = undefined)
@@ -103,7 +106,7 @@ class Router
         }
 
         this._nameRouteMap.set(name, url);
-        this._router.put(url, fn);
+        this._context.put(url, fn);
     }
 
     patch(url, fn, name = undefined)
@@ -114,7 +117,7 @@ class Router
         }
 
         this._nameRouteMap.set(name, url);
-        this._router.patch(url, fn);
+        this._context.patch(url, fn);
     }
 
     delete(url, fn, name = undefined)
@@ -125,7 +128,7 @@ class Router
         }
 
         this._nameRouteMap.set(name, url);
-        this._router.delete(url, fn);
+        this._context.delete(url, fn);
     }
 
     /**
@@ -141,7 +144,7 @@ class Router
             throw new InvalidArgumentError('controller must be of type Controller');
         }
 
-        const namePrefix = this._getLastSegment(baseUrl);
+        const namePrefix = this._getLastSegment(path.join(this._urlContext, baseUrl));
         const param = pluralize.singular(namePrefix);
 
         const defaultNames = this._getDefaultResourceNames(namePrefix, overrideNames);
@@ -160,17 +163,27 @@ class Router
         this.delete(showUrl, controller.destroy, defaultNames.destroy);
     }
 
+    group(urlPrefix, cb)
+    {
+        this._urlContext = urlPrefix;
+        this._context = new express.Router();
+        cb();
+        this._router.use(this._urlContext, this._context);
+        this._urlContext = '';
+        this._context = this._router;
+    }
+
     registerMiddleware(middleware)
     {
         if (typeof middleware === 'function')
         {
-            this._router.use(middleware);
+            this._context.use(middleware);
             return;
         }
 
         if (middleware instanceof Middleware)
         {
-            this._router.use(middleware.handle);
+            this._context.use(middleware.handle);
             return;
         }
 
@@ -186,6 +199,7 @@ class Router
     {
         this._nameRouteMap.clear();
         this._router = new express.Router();
+        this._context = this._router;
     }
 }
 

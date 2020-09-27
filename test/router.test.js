@@ -114,6 +114,13 @@ describe('router', () => {
             const name = router._getRouteName('/test/route/:param/');
             assert.strictEqual(name, 'test.route');
         });
+
+        it('considers the current route group', () => {
+            router.group('/test/group', () => {
+                const name = router._getRouteName('/sub/route');
+                assert.strictEqual(name, 'test.group.sub.route');
+            });
+        });
     });
 
     describe('_getDefaultResourceNames()', () => {
@@ -311,6 +318,50 @@ describe('router', () => {
             server.start();
             request(server.getServer())
                 .get('/endpoint')
+                .expect(200, () => {
+                    assert.strictEqual(middlewareCalled, true);
+                    done();
+                });
+        });
+
+        it('only calls middleware if the route is in the same group (negative test)', (done) => {
+            let middlewareCalled = false;
+
+            router.group('/group', () => {
+                router.registerMiddleware((req, res, next) => {
+                    middlewareCalled = true;
+                    next();
+                });
+            });
+            
+            router.get('/endpoint', (req, res) => { res.send('Success'); });
+            
+            server.start();
+
+            request(server.getServer())
+                .get('/endpoint')
+                .expect(200, () => {
+                    assert.strictEqual(middlewareCalled, false);
+                    done();
+                });
+        });
+
+        it('only calls middleware if the route is in the same group (positive test)', (done) => {
+            let middlewareCalled = false;
+
+            router.group('/group', () => {
+                router.registerMiddleware((req, res, next) => {
+                    middlewareCalled = true;
+                    next();
+                });
+
+                router.get('/endpoint', (req, res) => { res.send('Success'); });
+            });
+            
+            server.start();
+
+            request(server.getServer())
+                .get('/group/endpoint')
                 .expect(200, () => {
                     assert.strictEqual(middlewareCalled, true);
                     done();
