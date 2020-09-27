@@ -2,7 +2,7 @@ const path = require('path');
 const pluralize = require('pluralize');
 const express = require('express');
 const Controller = require('./http/Controller');
-const InvalidArgumentError = require('./exceptions/InvalidArgumentError');
+const InvalidArgumentError = require('./errors/InvalidArgumentError');
 const Middleware = require('./http/Middleware');
 
 /**

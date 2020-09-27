@@ -1,4 +1,4 @@
-const MethodNotImplementedError = require('../exceptions/MethodNotImplementedError');
+const MethodNotImplementedError = require('../errors/MethodNotImplementedError');
 
 class Controller
 {

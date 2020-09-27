@@ -1,6 +1,6 @@
 const assert = require('assert');
 const Controller = require('../src/http/Controller');
-const InvalidArgumentError = require('../src/exceptions/InvalidArgumentError');
+const InvalidArgumentError = require('../src/errors/InvalidArgumentError');
 const router = require('../src/router');
 
 class TestController extends Controller {}
