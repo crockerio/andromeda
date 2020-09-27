@@ -6,12 +6,14 @@
   "author": "Joshua Crocker <joshua+code@crocker.io>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pluralize": "^8.0.0"
   },
   "devDependencies": {
     "eslint": "^7.9.0",
     "husky": "^4.3.0",
-    "mocha": "^8.1.3"
+    "mocha": "^8.1.3",
+    "supertest": "^5.0.0"
   },
   "scripts": {
     "start": "NODE_ENV=development node ./src/index.js",

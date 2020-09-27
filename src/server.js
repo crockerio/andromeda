@@ -8,15 +8,33 @@ const staticPath = path.join(__dirname, 'public');
 app.use('/static', express.static(staticPath));
 console.log(`Mapped /static to ${staticPath}`);
 
-app.get('/', async (req, res) => {
-    res.send('Hello World!');
-});
+let server;
 
 module.exports = {
     start()
     {
-        app.listen(port, () => {
+        const router = require('./router');
+
+        app.use(router.getRouter());
+
+        server = app.listen(port, () => {
             console.log(`App listening at http://localhost:${port}`);
         });
+    },
+    close()
+    {
+        if (server !== undefined)
+        {
+            server.close();
+            server = undefined;
+        }
+    },
+    getApp()
+    {
+        return app;
+    },
+    getServer()
+    {
+        return server;
     }
 };
