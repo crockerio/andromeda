@@ -3,6 +3,7 @@ const pluralize = require('pluralize');
 const express = require('express');
 const Controller = require('./http/Controller');
 const InvalidArgumentError = require('./exceptions/InvalidArgumentError');
+const Middleware = require('./http/Middleware');
 
 /**
  * Router.
@@ -159,6 +160,23 @@ class Router
         this.delete(showUrl, controller.destroy, defaultNames.destroy);
     }
 
+    registerMiddleware(middleware)
+    {
+        if (typeof middleware === 'function')
+        {
+            this._router.use(middleware);
+            return;
+        }
+
+        if (middleware instanceof Middleware)
+        {
+            this._router.use(middleware.handle);
+            return;
+        }
+
+        throw new InvalidArgumentError('Invalid middleware');
+    }
+
     getRouter()
     {
         return this._router;
@@ -167,7 +185,7 @@ class Router
     reset()
     {
         this._nameRouteMap.clear();
-        this._router.routes = {};
+        this._router = new express.Router();
     }
 }
 

@@ -261,7 +261,7 @@ describe('router', () => {
         });
     });
 
-    describe.skip('http tests', () => {
+    describe('http tests', () => {
         const request = require('supertest');
         let server;
 
@@ -274,7 +274,8 @@ describe('router', () => {
             server.close();
         });
 
-        it('it can create a route', (done) => {
+
+        it.skip('it can create a route', (done) => {
             router.get('/endpoint', (req, res) => { res.send('Success'); });
             assert.strictEqual(router._nameRouteMap.size, 1);
 
@@ -284,7 +285,7 @@ describe('router', () => {
                 .expect(200, done);
         });
 
-        it('can reset the router instance', (done) => {
+        it.skip('can reset the router instance', (done) => {
             assert.strictEqual(router._nameRouteMap.size, 0);
             router.get('/endpoint', (req, res) => { res.send('Success'); });
             assert.strictEqual(router._nameRouteMap.size, 1);
@@ -296,6 +297,24 @@ describe('router', () => {
             request(server.getServer())
                 .get('/endpoint')
                 .expect(404, done);
+        });
+
+        it('can take a middleware function', (done) => {
+            let middlewareCalled = false;
+
+            router.registerMiddleware((req, res, next) => {
+                middlewareCalled = true;
+                next();
+            });
+
+            router.get('/endpoint', (req, res) => { res.send('Success'); });
+            server.start();
+            request(server.getServer())
+                .get('/endpoint')
+                .expect(200, () => {
+                    assert.strictEqual(middlewareCalled, true);
+                    done();
+                });
         });
     });
 });

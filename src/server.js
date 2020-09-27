@@ -14,6 +14,7 @@ module.exports = {
     start()
     {
         const router = require('./router');
+
         app.use(router.getRouter());
 
         server = app.listen(port, () => {
