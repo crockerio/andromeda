@@ -69,7 +69,7 @@ describe('renderer', () => {
 
     it('can render a view', (done) => {
         renderer.setViewDir(path.join(__dirname, 'res/views'));
-        router.get('/endpoint', (req, res) => { res.render('test', { test: 'test string' }) });
+        router.get('/endpoint', (req, res) => { res.render('test', { test: 'test string' }); });
         server.start();
 
         request(server.getServer())
