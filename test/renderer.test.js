@@ -2,6 +2,7 @@ const request = require('supertest');
 const assert = require('assert');
 const path = require('path');
 const renderer = require('../src/renderer');
+const router = require('../src/router');
 
 describe('renderer', () => {
     let server;
@@ -62,6 +63,21 @@ describe('renderer', () => {
             .end((err, res) => {
                 if (err) return done(err);
                 assert.strictEqual(res.text, 'Static Text File\n');
+                done();
+            });
+    });
+
+    it('can render a view', (done) => {
+        renderer.setViewDir(path.join(__dirname, 'res/views'));
+        router.get('/endpoint', (req, res) => { res.render('test', { test: 'test string' }) });
+        server.start();
+
+        request(server.getServer())
+            .get('/endpoint')
+            .expect(200)
+            .end((err, res) => {
+                if (err) return done(err);
+                assert.strictEqual(res.text, 'Test: test string.\n');
                 done();
             });
     });
