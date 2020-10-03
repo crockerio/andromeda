@@ -1,6 +1,6 @@
 {
   "name": "@crockerio/app",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "src/index.js",
   "repository": "git@github.com:crockerio/app.git",
   "author": "Joshua Crocker <joshua+code@crocker.io>",
