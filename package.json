@@ -1,8 +1,8 @@
 {
-  "name": "andromeda",
+  "name": "@crockerio/app",
   "version": "1.0.0",
   "main": "src/index.js",
-  "repository": "git@github.com:crockerio/andromeda.git",
+  "repository": "git@github.com:crockerio/app.git",
   "author": "Joshua Crocker <joshua+code@crocker.io>",
   "license": "MIT",
   "dependencies": {
