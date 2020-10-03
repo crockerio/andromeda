@@ -1,12 +1,7 @@
 const express = require('express');
-const path = require('path');
 
 const app = express();
 const port = 3000;
-
-const staticPath = path.join(__dirname, 'public');
-app.use('/static', express.static(staticPath));
-console.log(`Mapped /static to ${staticPath}`);
 
 let server;
 
@@ -14,6 +9,21 @@ module.exports = {
     start()
     {
         const router = require('./router');
+        const renderer = require('./renderer');
+
+        for (const path of renderer.getStaticDirs())
+        {
+            console.info(`Static path: ${path}`);
+
+            if (path.mountDir === null)
+            {
+                app.use(express.static(path.path));
+            }
+            else
+            {
+                app.use(path.mountDir, express.static(path.path));
+            }
+        }
 
         app.use(router.getRouter());
 
