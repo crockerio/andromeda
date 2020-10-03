@@ -11,19 +11,7 @@ module.exports = {
         const router = require('./router');
         const renderer = require('./renderer');
 
-        for (const path of renderer.getStaticDirs())
-        {
-            console.info(`Static path: ${path}`);
-
-            if (path.mountDir === null)
-            {
-                app.use(express.static(path.path));
-            }
-            else
-            {
-                app.use(path.mountDir, express.static(path.path));
-            }
-        }
+        renderer.start(app);
 
         app.use(router.getRouter());
 
